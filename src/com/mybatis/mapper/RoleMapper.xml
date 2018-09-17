@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mybatis.mapper.RoleMapper">
+    <insert id="insertRole" parameterType="role">
+        INSERT  INTO t_role(role_name,note) VALUES (#{roleName},#{note})
+    </insert>
+
+    <delete id="deleteRole" parameterType="long">
+        DELETE  FROM t_role WHERE id= #{id}
+    </delete>
+
+    <update id="updateRole" parameterType="role">
+        UPDATE t_role SET role_name= #{role_name},note= #{note}
+            WHERE id= #{id}
+    </update>
+
+    <select id="getRole" parameterType="long" resultType="role">
+        SELECT id,role_name roleName ,note FROM t_role WHERE id=#{id}
+    </select>
+
+    <select id="findRole" parameterType="String" resultType="role">
+        SELECT id,role_name roleName ,note FROM t_role WHERE 1=1
+        <if test="roleName!=null and roleName!=''">
+            AND role_name LIKE concat('%',#{roleName},'%')
+        </if>
+    </select>
+
+    <select id="findRolesByMap" parameterType="map" resultType="role">
+        SELECT id,role_name roleName ,note FROM t_role WHERE role_name LIKE concat('%',#{roleName},'%')
+          AND note  LIKE concat('%',#{note},'%')
+    </select>
+
+    <select id="findRolesByAnnotation" resultType="role">
+        SELECT id,role_name roleName ,note FROM t_role WHERE role_name LIKE concat('%',#{roleName},'%')
+          AND note  LIKE concat('%',#{note},'%')
+    </select>
+
+    <select id="findRolesByBean" parameterType="com.mybatis.pojo.RoleParams" resultType="role">
+        SELECT id,role_name roleName ,note FROM t_role WHERE role_name LIKE concat('%',#{roleName},'%')
+        AND note  LIKE concat('%',#{note},'%')
+    </select>
+
+    <select id="findByMix" resultType="role">
+        SELECT id,role_name roleName ,note FROM t_role WHERE role_name LIKE concat('%',#{params.roleName},'%')
+        AND note  LIKE concat('%',#{params.note},'%')
+        limit #{page.start},#{page.limit}
+    </select>
+</mapper>
